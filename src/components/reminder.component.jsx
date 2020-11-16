@@ -11,10 +11,12 @@ class ReminderComponent extends React.Component {
             currentUser: authService.currentUserValue,
             editing: props.creating,
             deleting: false,
-            reminder: props.reminder
+            reminder: props.reminder,
+            reminder_edit: JSON.parse(JSON.stringify(props.reminder))
         };
 
         this.state.reminder.date = new Date(props.reminder.date);
+        this.state.reminder_edit.date = new Date(props.reminder.date);
     }
 
     onChangeDate(date) {
@@ -39,7 +41,9 @@ class ReminderComponent extends React.Component {
         });
 
         if (canceled) {
-            this.props.onFilter();
+            this.setState({
+                reminder: this.state.reminder_edit
+            }, () => this.props.onEditChild(status, this.state.reminder._id));
         } else if (!status) {
             if (this.state.reminder._id) {
                 reminderService
@@ -82,37 +86,14 @@ class ReminderComponent extends React.Component {
     render() {
         const { name, description, priority, date } = this.state.reminder;
         return (
-            <div className={this.state.editing ? 'card margin-bottom-10 editing' : 'card margin-bottom-10'}>
+            <div className={this.state.editing ? 'card margin-bottom-10 min-height-100 editing' : 'card margin-bottom-10 min-height-100'}>
                 <div className="card-header">
-                    <p className="margin-auto" hidden={this.state.editing}><i className="fa fa-star"></i> {name}</p>
+                    <p className="margin-auto float-inline-start" hidden={this.state.editing}><i className="fa fa-star"></i> {name}</p>
                     <input hidden={!this.state.editing} type="text" 
-                        className="form-control" placeholder="Reminder Name" value={name}
+                        className="form-control width-60 float-inline-start" placeholder="Reminder Name" value={name}
                         onChange={(e) => this.onChange(e, 'name')}>
                     </input>
-                </div>
-                <div className="card-body">
-                    <div className="margin-bottom-10">
-                        <p hidden={this.state.editing}>{description}</p>
-                        <textarea hidden={!this.state.editing} placeholder="Reminder Description"
-                            className="form-control margin-bottom-10" rows="3" value={description}
-                            onChange={(e) => this.onChange(e, 'description')}>
-                        </textarea>
-                        <hr />
-                        <div className="display-flex">
-                            <select className="custom-select width-20" disabled={!this.state.editing}
-                                onChange={(e) => this.onChange(e, 'priority')}>
-                                <option value={priority}>{priority}</option>
-                                <option value="Low">Low</option>
-                                <option value="Medium">Medium</option>
-                                <option value="High">High</option>
-                            </select>
-                            <DatePicker className="form-control margin-left-10"
-                                disabled={!this.state.editing}
-                                selected={date ? date : this.state.startDate} 
-                                onChange={date => this.onChangeDate(date)} />
-                        </div>
-                    </div>
-                    <div className={this.state.deleting ? 'hide' : ''}>
+                    <div className={this.state.deleting ? 'hide' : 'float-inline-end'}>
                         <button className={this.state.editing ? 'btn btn-success margin-left-10' : 'btn btn-primary margin-left-10'}
                             onClick={() => this.onToggleEdit(!this.state.editing)}>
                                 <i className="fa fa-pencil-square-o"></i> {this.state.editing ? 'Save' : 'Edit'}
@@ -122,6 +103,15 @@ class ReminderComponent extends React.Component {
                                 <i className={this.state.editing ? 'fa fa-times' : 'fa fa-trash-o'}></i> {this.state.editing ? 'Cancel' : 'Delete'}
                         </button>
                     </div>
+                </div>
+                <div className="card-body">
+                    <div className="margin-bottom-10">
+                        <p hidden={this.state.editing}>{description}</p>
+                        <textarea hidden={!this.state.editing} placeholder="Reminder Description"
+                            className="form-control margin-bottom-10" rows="3" value={description}
+                            onChange={(e) => this.onChange(e, 'description')}>
+                        </textarea>
+                    </div>
                     <div className={this.state.deleting ? 'confirmation-panel' : 'hide'}>
                         <p><i className="fa fa-exclamation"></i> Are you sure you want to delete this reminder?</p>
                         <button className="btn btn-secondary margin-left-10" onClick={() => this.onConfirmDelete(true)}>
@@ -130,6 +120,21 @@ class ReminderComponent extends React.Component {
                         <button className="btn btn-secondary margin-left-10" onClick={() => this.onConfirmDelete(false)}>
                             <i className="fa fa-times"></i> No
                         </button>
+                    </div>
+                </div>
+                <div className="card-footer">
+                    <div className="display-flex">
+                        <select className="custom-select width-70" disabled={!this.state.editing}
+                            onChange={(e) => this.onChange(e, 'priority')}>
+                            <option value={priority}>{priority}</option>
+                            <option value="Low">Low</option>
+                            <option value="Medium">Medium</option>
+                            <option value="High">High</option>
+                        </select>
+                        <DatePicker className="form-control margin-left-10"
+                            disabled={!this.state.editing}
+                            selected={date ? date : this.state.startDate} 
+                            onChange={date => this.onChangeDate(date)} />
                     </div>
                 </div>
             </div>

@@ -9,6 +9,7 @@ class DashboardComponent extends React.Component {
         this.onEditChild = this.onEditChild.bind(this);
         this.onFilter = this.onFilter.bind(this);
         this.onCreate = this.onCreate.bind(this);
+        this.onPressedEnter = this.onPressedEnter.bind(this);
 
         this.state = {
             currentUser: authService.currentUserValue,
@@ -34,6 +35,12 @@ class DashboardComponent extends React.Component {
         });
     }
 
+    onPressedEnter(e) {
+        if (e.key === 'Enter') {
+            this.onFilter();
+        }
+    }
+
     onCreate() {
         const reminders = this.state.reminders;
         const creating = reminders.filter(r => !r._id);
@@ -55,9 +62,10 @@ class DashboardComponent extends React.Component {
         }, () => {
             reminderService.findAll().then(response => {
                 let reminders = response.filter(reminder => {
-                    return reminder.name.toLowerCase().indexOf(this.state.filter) >= 0 ||
-                        reminder.description.indexOf(this.state.filter) >= 0 ||
-                        reminder.priority.toLowerCase() === this.state.filter;
+                    const query = this.state.filter.toLocaleLowerCase();
+                    return reminder.name.toLowerCase().indexOf(query) >= 0 ||
+                        reminder.description.toLowerCase().indexOf(query) >= 0 ||
+                        reminder.priority.toLowerCase() === query;
                 });
                 
                 this.setState({ 
@@ -80,7 +88,7 @@ class DashboardComponent extends React.Component {
         const { currentUser, reminders, blurme, blurme_excluded } = this.state;
         return (
             <div>
-                <div className={blurme ? 'card blured' : 'card'}>
+                <div className="card">
                     <h5 className="card-header bg-dark text-white"><i className="fa fa-th"></i> Dashboard</h5>
                     <div className="card-body">
                         <h5 className="card-title">Welcome {currentUser.user.username}</h5>
@@ -95,7 +103,7 @@ class DashboardComponent extends React.Component {
 
                             <div className="col-sm-6 findReminder">
                                 <input className="form-control" type="text" placeholder="Search"
-                                    onChange={(e) => this.onChange(e, 'filter')}></input>
+                                    onChange={(e) => this.onChange(e, 'filter')} onKeyDown={this.onPressedEnter}></input>
 
                                 <button className="btn btn-primary margin-left-10" onClick={this.onFilter}>
                                     <i className="fa fa-search"></i> Find</button>
