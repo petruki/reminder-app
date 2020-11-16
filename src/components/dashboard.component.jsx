@@ -42,7 +42,8 @@ class DashboardComponent extends React.Component {
             this.setState({ 
                 reminders: this.sortReminders(reminders), 
                 creating: true,
-                blurme: true
+                blurme: true,
+                blurme_excluded: 0
             });
         }
     }
@@ -108,18 +109,20 @@ class DashboardComponent extends React.Component {
                 </div>
 
                 <div className="display-flex margin-10">
-                    <hr className="left-separator" />Reminder List<hr className="right-separtor" />
+                    <hr className="left-separator" />Your Reminders<hr className="right-separtor" />
                 </div>
 
                 {this.state.creating ?
                     <ReminderComponent reminder={{ name: '', description: '', priority: 'Low', date: new Date() }} creating={true}
                         onFilter={this.onFilter} /> : ''}
 
-                {reminders.map((reminder, i) => 
-                    <div key={i} className={blurme && reminder._id !== blurme_excluded ? 'blured' : ''}>
-                        <ReminderComponent key={i} reminder={reminder} creating={false} onEditChild={this.onEditChild}
-                            onFilter={this.onFilter} />
-                    </div>)}
+                <div className="reminders-container">
+                    {reminders.map((reminder, i) => 
+                        <div key={i} className={blurme && reminder._id !== blurme_excluded ? 'reminder-item blured' : 'reminder-item'}>
+                            <ReminderComponent key={i} reminder={reminder} creating={false} onEditChild={this.onEditChild}
+                                onFilter={this.onFilter} />
+                        </div>)}
+                </div>
             </div>
         );
     }

@@ -33,12 +33,14 @@ class ReminderComponent extends React.Component {
         });
     }
 
-    onToggleEdit(status) {
+    onToggleEdit(status, canceled) {
         this.setState({
             editing: status
         });
 
-        if (!status) {
+        if (canceled) {
+            this.props.onFilter();
+        } else if (!status) {
             if (this.state.reminder._id) {
                 reminderService
                     .updateById(this.state.reminder)
@@ -58,7 +60,7 @@ class ReminderComponent extends React.Component {
     onCancelDelete() {
         if (this.state.reminder._id) {
             if (this.state.editing) {
-                this.onToggleEdit(false);
+                this.onToggleEdit(false, true);
             } else {
                 this.setState({ deleting: true });
             }

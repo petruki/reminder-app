@@ -60,3 +60,14 @@
 .right-separtor {
   float: right;
 }
+
+.reminders-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.reminder-item {
+  margin: 5px;
+  width: 49%;
+}
