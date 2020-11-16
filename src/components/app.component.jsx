@@ -40,7 +40,7 @@ class AppComponent extends React.Component {
                             </div>
                         </nav>
                     }
-                    <div className="container">
+                    <div className="container min-height-100vh">
                         <div className="row">
                             <div className="card-body">
                                 <AuthGuard exact path="/" component={DashboardComponent} />
@@ -49,6 +49,11 @@ class AppComponent extends React.Component {
                             </div>
                         </div>
                     </div>
+                    <footer className="footer">
+                        <div className="container text-center">
+                            <span className="text-muted">Created by Roger Floriano - 2020</span>
+                        </div>
+                    </footer>
                 </div>
             </Router>
         );

@@ -1,12 +1,12 @@
 import React from 'react';
 import { userService, reminderService, authService } from '../_services';
+import { ReminderListComponent } from './reminder-list.component';
 import { ReminderComponent } from './reminder.component';
 
 class DashboardComponent extends React.Component {
     constructor(props) {
         super(props);
 
-        this.onEditChild = this.onEditChild.bind(this);
         this.onFilter = this.onFilter.bind(this);
         this.onCreate = this.onCreate.bind(this);
         this.onPressedEnter = this.onPressedEnter.bind(this);
@@ -77,15 +77,12 @@ class DashboardComponent extends React.Component {
         });
     }
 
-    onEditChild(status, blurme_excluded) {
-        this.setState({
-            blurme: status,
-            blurme_excluded
-        });
+    sortReminders(reminders) {
+        return reminders.sort((a, b) => new Date(a.date) - new Date(b.date));
     }
 
     render() {
-        const { currentUser, reminders, blurme, blurme_excluded } = this.state;
+        const { currentUser, reminders } = this.state;
         return (
             <div>
                 <div className="card">
@@ -94,7 +91,6 @@ class DashboardComponent extends React.Component {
                         <h5 className="card-title">Welcome {currentUser.user.username}</h5>
                         
                         <div className="row">
-
                             <div className="col-sm-6">
                                 <p className="card-text">You have {reminders.length} items on your reminder list.</p>
                                 <button className="btn btn-primary" disabled={this.state.creating} onClick={() => this.onCreate()}>
@@ -104,40 +100,30 @@ class DashboardComponent extends React.Component {
                             <div className="col-sm-6 findReminder">
                                 <input className="form-control" type="text" placeholder="Search"
                                     onChange={(e) => this.onChange(e, 'filter')} onKeyDown={this.onPressedEnter}></input>
-
                                 <button className="btn btn-primary margin-left-10" onClick={this.onFilter}>
                                     <i className="fa fa-search"></i> Find</button>
-
                                 <button className="btn btn-secondary margin-left-10" onClick={(e) => this.onFilter(e, true)}>
                                     <i className="fa fa-repeat"></i> Clear</button>
-
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div className="display-flex margin-10">
-                    <hr className="left-separator" />Your Reminders<hr className="right-separtor" />
+                <div className="margin-10">
+                    {this.state.creating ?
+                        <ReminderComponent reminder={{ name: '', description: '', priority: 'Low', date: new Date() }} creating={true}
+                            onFilter={this.onFilter} /> : ''}
                 </div>
 
-                {this.state.creating ?
-                    <ReminderComponent reminder={{ name: '', description: '', priority: 'Low', date: new Date() }} creating={true}
-                        onFilter={this.onFilter} /> : ''}
-
-                <div className="reminders-container">
-                    {reminders.map((reminder, i) => 
-                        <div key={i} className={blurme && reminder._id !== blurme_excluded ? 'reminder-item blured' : 'reminder-item'}>
-                            <ReminderComponent key={i} reminder={reminder} creating={false} onEditChild={this.onEditChild}
-                                onFilter={this.onFilter} />
-                        </div>)}
-                </div>
+                {reminders.length ? 
+                    <ReminderListComponent onFilter={this.onFilter} state={this.state} /> : 
+                    <div className="display-flex margin-10">
+                        <hr className="left-separator" />Create your first reminder<hr className="right-separtor" />
+                    </div>}
             </div>
         );
     }
 
-    sortReminders(reminders) {
-        return reminders.sort((a, b) => new Date(a.date) - new Date(b.date));
-    }
 }
 
 export { DashboardComponent };
