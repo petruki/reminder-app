@@ -1,6 +1,6 @@
 import React from 'react';
 import DatePicker from "react-datepicker";
-import { authService, reminderService } from '../_services';
+import { reminderService } from '../_services';
 import "react-datepicker/dist/react-datepicker.css";
 
 class ReminderComponent extends React.Component {
@@ -8,7 +8,6 @@ class ReminderComponent extends React.Component {
         super(props);
 
         this.state = {
-            currentUser: authService.currentUserValue,
             editing: props.creating,
             deleting: false,
             reminder: props.reminder,
@@ -42,7 +41,7 @@ class ReminderComponent extends React.Component {
 
         if (canceled) {
             this.setState({
-                reminder: this.state.reminder_edit
+                reminder: Object.create(this.state.reminder_edit)
             }, () => this.props.onEditChild(status, this.state.reminder._id));
         } else if (!status) {
             if (this.state.reminder._id) {
