@@ -2,6 +2,7 @@ import React from 'react';
 import DatePicker from "react-datepicker";
 import { reminderService } from '../_services';
 import "react-datepicker/dist/react-datepicker.css";
+import { BlockUIComponent } from './block-ui.component';
 
 class ReminderComponent extends React.Component {
     constructor(props) {
@@ -66,6 +67,7 @@ class ReminderComponent extends React.Component {
                 this.onToggleEdit(false, true);
             } else {
                 this.setState({ deleting: true });
+                this.props.onEditChild(true, this.state.reminder._id);
             }
         } else {
             this.props.onFilter();
@@ -79,13 +81,15 @@ class ReminderComponent extends React.Component {
                 .then(() => this.props.onFilter());
         } else {
             this.setState({ deleting: false });
+            this.props.onEditChild(false, this.state.reminder._id);
         }
     }
 
     render() {
         const { name, description, priority, date } = this.state.reminder;
         return (
-            <div className={this.state.editing ? 'card margin-bottom-10 min-height-100 editing' : 'card margin-bottom-10 min-height-100'}>
+            <div className={this.state.editing ? 'card margin-bottom-10 min-height-100 editing ' : 'card margin-bottom-10 min-height-100'}>
+                <BlockUIComponent blocked={this.props.blockui} />
                 <div className="card-header">
                     <p className="margin-auto float-inline-start" hidden={this.state.editing}><i className="fa fa-star"></i> {name}</p>
                     <input hidden={!this.state.editing} type="text" 

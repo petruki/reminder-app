@@ -2,11 +2,17 @@ import { authHeader, handleResponse } from '../_helpers';
 import { dev } from '../_environment';
 
 export const reminderService = {
+    count,
     findAll,
     create,
     updateById,
     deleteById
 };
+
+function count() {
+    const requestOptions = { method: 'GET', headers: authHeader() };
+    return fetch(`${dev.API_URL}/api/reminder/count`, requestOptions).then(handleResponse);
+}
 
 function findAll() {
     const requestOptions = { method: 'GET', headers: authHeader() };

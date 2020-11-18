@@ -20,12 +20,24 @@ footer {
   margin-left: 10px;
 }
 
+.margin-left-2 {
+  margin-left: 2px;
+}
+
+.margin-right-2 {
+  margin-right: 2px;
+}
+
 .margin-bottom-10 {
   margin-bottom: 10px;
 }
 
 .margin-10 {
   margin: 10px;
+}
+
+.margin-top-10 {
+  margin-top: 10px;
 }
 
 .display-flex {
@@ -63,7 +75,7 @@ footer {
 .findReminder {
   display: inherit;
   margin-top: auto;
-  padding-top: 10px;
+  margin-left: auto;
 }
 
 .blured {
@@ -76,6 +88,12 @@ footer {
 
 .hide {
   display: none;
+}
+
+.block {
+  position: absolute;
+  height: 100%;
+  width: 100%;
 }
 
 .confirmation-panel {
@@ -104,4 +122,31 @@ footer {
 .reminder-item {
   margin: 5px;
   width: 49%;
+}
+
+.component-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.top-100 {
+  top: 100px;
+}
+
+@media only screen and (max-width: 1200px) {
+  .reminder-item {
+    width: 100%;
+  }
+}
+
+@media only screen and (max-width: 770px) {
+  .findReminder {
+    margin: auto;
+    padding-top: 10px;
+  }
+
+  .separtor, .left-separator, .right-separtor {
+    width: 20%;
+  }
 }
