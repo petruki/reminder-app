@@ -119,9 +119,14 @@ class ReminderListComponent extends React.Component {
                             onFilter={this.onFilter} /> : ''}
                 </div>
 
-                <div className="row display-flex margin-10">
-                    <hr className="left-separator" />Your Reminders<hr className="right-separtor" />
-                </div>
+                {reminders.length ?
+                    <div className="row display-flex margin-10">
+                        <hr className="left-separator" />Your Reminders<hr className="right-separtor" />
+                    </div> :
+                    <div className="display-flex margin-10">
+                        <hr className="left-separator" />Create your first reminder<hr className="right-separtor" />
+                    </div>
+                }
 
                 <div className="row reminders-container">
                     {reminders.map((reminder, i) => 
@@ -133,7 +138,6 @@ class ReminderListComponent extends React.Component {
             </div>
         );
     }
-
 }
 
 export { ReminderListComponent };

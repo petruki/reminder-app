@@ -37,11 +37,7 @@ class DashboardComponent extends React.Component {
                     </div>
                 </div>
 
-                {total !== 0 ? 
-                    <ReminderListComponent /> : 
-                    <div className="display-flex margin-10">
-                        <hr className="left-separator" />Create your first reminder<hr className="right-separtor" />
-                    </div>}
+                <ReminderListComponent />
             </div>
         );
     }
