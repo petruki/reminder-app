@@ -53,7 +53,10 @@ class ReminderComponent extends React.Component {
             } else {
                 reminderService
                     .create(this.state.reminder)
-                    .then(() => this.props.onFilter())
+                    .then(() => {
+                        this.props.onFilter();
+                        this.props.updateDashboard();
+                    })
                     .catch((e) => this.props.onFilter());
             }
         } else {
@@ -78,7 +81,10 @@ class ReminderComponent extends React.Component {
         if (response) {
             reminderService
                 .deleteById(this.state.reminder._id)
-                .then(() => this.props.onFilter());
+                .then(() => {
+                    this.props.updateDashboard();
+                    this.props.onFilter();
+                });
         } else {
             this.setState({ deleting: false });
             this.props.onEditChild(false, this.state.reminder._id);
@@ -127,9 +133,8 @@ class ReminderComponent extends React.Component {
                 </div>
                 <div className="card-footer">
                     <div className="display-flex">
-                        <select className="custom-select width-70" disabled={!this.state.editing}
+                        <select className="custom-select width-70" disabled={!this.state.editing} value={priority}
                             onChange={(e) => this.onChange(e, 'priority')}>
-                            <option value={priority}>{priority}</option>
                             <option value="Low">Low</option>
                             <option value="Medium">Medium</option>
                             <option value="High">High</option>
